@@ -1,0 +1,13 @@
+<div id={@id} class="flex flex-col w-full">
+  <.async_result :let={%{phone_numbers: skip_traces}} assign={@skip_traces}>
+    <:loading>
+      Loading
+    </:loading>
+
+    <:failed :let={_reason}>There was an error loading skip traces.</:failed>
+
+    <p :for={skip_trace <- skip_traces}>
+      <SkipTrace.Row.live_render id={"skip_trace_#{skip_trace.id}"} />
+    </p>
+  </.async_result>
+</div>

@@ -1,0 +1,15 @@
+<.button
+  class="h-fit w-full sm:w-auto ml-auto"
+  label="Search"
+  loading={@loading}
+  disabled={@loading}
+  phx-click="search"
+/>
+
+<%= if @loading do %>
+  <div class="flex justify-center">
+    <.spinner size="md" class="text-secondary-500 mr-5 mt-5" />
+  </div>
+<% else %>
+  <DataTable.live_render id="list" params={%{}} query={@query} />
+<% end %>

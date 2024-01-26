@@ -1,0 +1,37 @@
+<div class="relative flex flex-col grow">
+  <div
+    {@heex_class}
+    {@rest}
+    id={@id}
+    phx-hook="InfinityScrollHook"
+    phx-viewport-top-event={@has_previous? && "prev-page"}
+    phx-viewport-bottom-event={@has_next? && "next-page"}
+    phx-target={@myself}
+    data-stream-name={@stream_name}
+  >
+    <div class="grid">
+      <div
+        id={"#{@id}-header"}
+        class="w-auto min-w-auto flex sticky top-0 divide-x divide-gray-200 text-xs font-medium tracking-wider text-left text-gray-700 uppercase bg-gray-50 border-b min-h-[42px] max-h-[42px]"
+      >
+        <%= render_slot(@headers, @myself) %>
+      </div>
+
+      <div id={"#{@id}-body"} phx-update="stream">
+        <div
+          :for={{id, row} <- fetch_stream!(@streams, @stream_name)}
+          id={id}
+          data-cursor={row.__metadata__.keyset}
+          class="w-auto min-w-auto flex border-b last:border-none text-sm text-gray-500 scroll-mt-[42px]"
+        >
+          <%= render_slot(@row, row) %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <InnerComponents.top_loading id={@id} />
+  <InnerComponents.bottom_loading id={@id} />
+
+  <Table.GoToTop.render id={@id} tbody_id={"##{@id}-body"} />
+</div>
